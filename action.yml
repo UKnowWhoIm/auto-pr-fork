@@ -1,7 +1,9 @@
-name: 'auto-pr-fork'
+name: 'Auto PR fork'
+author: 'Sidharth Ajithkumar'
 description: 'A github action to create a PR from a fork to the upstream'
-icon: 'arrow-up-circle'
-color: 'green'
+branding:
+  icon: 'arrow-up-circle'
+  color: 'green'
 inputs:
   branch-fork:
     description: "Branch of fork"
