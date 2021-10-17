@@ -1,0 +1,26 @@
+name: 'auto-pr-fork'
+description: 'A github action to create a PR from a fork to the upstream'
+inputs:
+  branch-fork:
+    description: "Branch of fork"
+    required: true
+    default: "main"
+  
+  branch-upstream:
+    description: "Branch of upstream"
+    required: true
+    default: "main"
+  
+  make-pr-draft:
+    description: "Should created PRs be draft?"
+    required: true
+    default: false
+  
+  description:
+    description: "Additional description for created PR"
+    required: false
+    default: ""
+  
+  title:
+    description: "Default title for created PR"
+    required: false
