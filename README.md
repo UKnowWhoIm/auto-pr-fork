@@ -38,7 +38,7 @@ This parameter must be passed to the environment and must be stored as a [reposi
 
 ```
 - uses: uknowwhoim/auto-pr-fork@main
-env:
+  env:
     GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
 ```
 
