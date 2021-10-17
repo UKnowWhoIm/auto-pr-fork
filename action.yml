@@ -13,7 +13,7 @@ inputs:
   
   make-pr-draft:
     description: "Should created PRs be draft?"
-    required: true
+    required: false
     default: false
   
   description:
@@ -24,6 +24,7 @@ inputs:
   title:
     description: "Default title for created PR"
     required: false
+
 runs:
     using: 'node12'
     main: 'index.js'

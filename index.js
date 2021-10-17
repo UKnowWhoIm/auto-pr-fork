@@ -3,7 +3,7 @@ const github = require("@actions/github");
 
 const FORK_BRANCH = core.getInput("branch-fork");
 const UPSTREAM_BRANCH = core.getInput("branch-upstream");
-const IS_DRAFT = core.getInput("make-pr-draft");
+const IS_DRAFT = core.getInput("make-pr-draft") != "false";
 const DEFAULT_DESCRIPTION = core.getInput("description");
 const TITLE = core.getInput("title");
 
@@ -12,6 +12,7 @@ const [FORKED_REPO_OWNER, FORKED_REPO_NAME] = process.env.GITHUB_REPOSITORY.spli
 
 const createBody = () => `
 ${DEFAULT_DESCRIPTION}
+
 Auto generated PR by [auto-fork-pr](https://github.com/UKnowWhoIm/auto-pr-fork) on ${new Date().toString()}
 `;
 
@@ -34,17 +35,27 @@ async function run () {
             repo: upstreamReposDetails.name,
             head: `${FORKED_REPO_OWNER}:${FORK_BRANCH}`,
             base: UPSTREAM_BRANCH,
-            title: defaultTitle() || TITLE,
+            title: TITLE || defaultTitle(),
             body: createBody(),
             draft: IS_DRAFT
         });
+        return "Pull request created successfully";
+
     } catch (err) {
         if (err.status === 404) {
             throw Error("Repository not found, user may not have access to the repo");
         } else if (err.status === 422) {
-            console.log(err.message);
+            pattern = /Validation .+?: ({.+})/
+            const regexResult = err.message.match(pattern);
+            if (!regexResult) {
+                throw Error(err.message);
+            }
+            return JSON.parse(regexResult[1]).message;
         }
+        throw err;
     }   
 }
 
-run();
+run()
+.then(r => {console.log(r)})
+.catch(err => {core.setFailed(err)});
