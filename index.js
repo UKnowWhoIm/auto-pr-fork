@@ -34,7 +34,7 @@ async function run () {
             repo: upstreamReposDetails.name,
             head: `${FORKED_REPO_OWNER}:${FORK_BRANCH}`,
             base: UPSTREAM_BRANCH,
-            title: defaultTitle() ?? TITLE,
+            title: defaultTitle() || TITLE,
             body: createBody(),
             draft: IS_DRAFT
         });
