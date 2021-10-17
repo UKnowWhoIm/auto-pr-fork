@@ -1,11 +1,11 @@
-import { getInput } from "@actions/core";
-import { getOctokit } from "@actions/github";
+const core = require("@actions/core");
+const github = require("@actions/github");
 
-const FORK_BRANCH = getInput("branch-fork");
-const UPSTREAM_BRANCH = getInput("branch-upstream");
-const IS_DRAFT = getInput("make-pr-draft");
-const DEFAULT_DESCRIPTION = getInput("description");
-const TITLE = getInput("title");
+const FORK_BRANCH = core.getInput("branch-fork");
+const UPSTREAM_BRANCH = core.getInput("branch-upstream");
+const IS_DRAFT = core.getInput("make-pr-draft");
+const DEFAULT_DESCRIPTION = core.getInput("description");
+const TITLE = core.getInput("title");
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const [FORKED_REPO_OWNER, FORKED_REPO_NAME] = process.env.GITHUB_REPOSITORY.split("/");
@@ -18,7 +18,7 @@ Auto generated PR by [auto-fork-pr](https://github.com/UKnowWhoIm/auto-pr-fork) 
 const defaultTitle = () => `Catch up with ${FORKED_REPO_OWNER}/${FORKED_REPO_NAME}`
 
 async function run () {
-    const octokit = getOctokit(GITHUB_TOKEN);
+    const octokit = github.getOctokit(GITHUB_TOKEN);
 
     try {
         const fokedRepoDetails = (await octokit.rest.repos.get({
