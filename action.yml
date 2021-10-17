@@ -24,3 +24,6 @@ inputs:
   title:
     description: "Default title for created PR"
     required: false
+runs:
+    using: 'node14'
+    main: 'index.js'
