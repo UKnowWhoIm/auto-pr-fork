@@ -1,5 +1,7 @@
 name: 'auto-pr-fork'
 description: 'A github action to create a PR from a fork to the upstream'
+icon: 'arrow-up-circle'
+color: 'green'
 inputs:
   branch-fork:
     description: "Branch of fork"

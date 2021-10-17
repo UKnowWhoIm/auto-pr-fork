@@ -20,7 +20,7 @@ A github action to automatically create PR from a fork to the upstream
 
 ```
 steps:
-  - uses: uknowwhoim/auto-pr-fork@main
+  - uses: uknowwhoim/auto-pr-fork@v0.1
     with:
       # Title of your PR
       title: "Catch Up PR"
