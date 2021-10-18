@@ -5,13 +5,15 @@ A github action to automatically create PR from a fork to the upstream
 ### Table of Contents
 
 - [Usage](#usage)
+- [Usage for multiple forks](#usage-for-multiple-forks)
 - [Inputs](#inputs)
     - [GITHUB_TOKEN](#github_token)
-    - [branch-fork](#branch-fork)
-    - [branch-upstream](#branch-upstream)
-    - [make-pr-draft](#make-pr-draft)
-    - [title](#title)
-    - [description](#description)
+    - [AUTO_PR_SETTINGS](#AUTO_PR_SETTINGS)
+      - [branchFork](#branch-fork)
+      - [branchUpstream](#branch-upstream)
+      - [isDraft](#make-pr-draft)
+      - [title](#title)
+      - [description](#description)
 - [Triggers](#triggers)
     - [push](#push)
     - [schedule](#schedule)
@@ -21,11 +23,27 @@ A github action to automatically create PR from a fork to the upstream
 ```
 steps:
   - uses: uknowwhoim/auto-pr-fork@v0.1
-    with:
-      # Title of your PR
-      title: "Catch Up PR"
     env:
       GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+      AUTO_PR_SETTINGS: ${{ secrets.AUTO_PR_SETTINGS }}
+```
+
+### Usage for multiple forks
+
+Handling multiple settings for different forks is tricky. To allow each fork to have its unique configuration, usage of [repository secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) is recommended.
+
+To allow certain forks to disable this workflow, add a condition to the workflow file, which skips the step if a certain repository secret is not set.
+
+
+In this example this step would only be executed if the repository has a secret `ALLOW_AUTO_PR` and its truthy.
+```
+steps:
+  - uses: uknowwhoim/auto-pr-fork@v0.1
+    if: ${{ env.ALLOW }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+      AUTO_PR_SETTINGS: ${{ secrets.AUTO_PR_SETTINGS }}
+      ALLOW: ${{ secrets.ALLOW_AUTO_PR }}
 ```
 
 ### Inputs
@@ -42,19 +60,25 @@ This parameter must be passed to the environment and must be stored as a [reposi
     GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
 ```
 
-#### branch-fork
+#### AUTO_PR_SETTINGS
+
+To provide more flexibility for forks, all settings are stored as json in the environment. You can do this by creating a [repository secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets) and storing the JSON string inside it. Load the secret into the environment variable `AUTO_PR_SETTINGS`.
+
+The configurable settings are as follows
+
+#### branchFork
 
 The branch of the fork you want to merge into upstream.
 
 Default is `main`
 
-#### branch-upstream
+#### branchUpstream
 
 The branch of the upstream, you want to to merge your fork into.
 
 Default is `main`
 
-#### make-pr-draft
+#### isDraft
 
 Make the PRs created by this repo draft by default(Public repos only)
 
@@ -69,7 +93,6 @@ Default is `Catch up with <OWNER>/<REPO_NAME>`
 #### description
 
 The description of PRs created by this action.
-
 
 ### Triggers
 
