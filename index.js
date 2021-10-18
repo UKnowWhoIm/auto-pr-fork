@@ -23,7 +23,6 @@ const defaultTitle = () => `Catch up with ${FORKED_REPO_OWNER}/${FORKED_REPO_NAM
 
 async function run () {
     const octokit = github.getOctokit(GITHUB_TOKEN);
-
     try {
         const fokedRepoDetails = (await octokit.rest.repos.get({
             owner: FORKED_REPO_OWNER,

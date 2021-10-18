@@ -8445,17 +8445,20 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(8446);
 const github = __nccwpck_require__(5388);
 
-const FORK_BRANCH = core.getInput("branch-fork");
-const UPSTREAM_BRANCH = core.getInput("branch-upstream");
-const IS_DRAFT = core.getInput("make-pr-draft") != "false";
-const DEFAULT_DESCRIPTION = core.getInput("description");
-const TITLE = core.getInput("title");
+const DEFAULT_SETTINGS = {
+    branchFork: "main",
+    branchUpstream: "main",
+    isDraft: false,
+    description: "",
+    title: null
+};
 
+const SETTINGS = {...DEFAULT_SETTINGS, ...JSON.parse(process.env.AUTO_PR_SETTINGS || "{}")};
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const [FORKED_REPO_OWNER, FORKED_REPO_NAME] = process.env.GITHUB_REPOSITORY.split("/");
 
 const createBody = () => `
-${DEFAULT_DESCRIPTION}
+${SETTINGS.description}
 
 Auto generated PR by [auto-fork-pr](https://github.com/UKnowWhoIm/auto-pr-fork) on ${new Date().toString()}
 `;
@@ -8464,7 +8467,6 @@ const defaultTitle = () => `Catch up with ${FORKED_REPO_OWNER}/${FORKED_REPO_NAM
 
 async function run () {
     const octokit = github.getOctokit(GITHUB_TOKEN);
-
     try {
         const fokedRepoDetails = (await octokit.rest.repos.get({
             owner: FORKED_REPO_OWNER,
@@ -8477,11 +8479,11 @@ async function run () {
         await octokit.rest.pulls.create({
             owner: upstreamReposDetails.owner.login,
             repo: upstreamReposDetails.name,
-            head: `${FORKED_REPO_OWNER}:${FORK_BRANCH}`,
-            base: UPSTREAM_BRANCH,
-            title: TITLE || defaultTitle(),
+            head: `${FORKED_REPO_OWNER}:${SETTINGS.branchFork}`,
+            base: SETTINGS.branchUpstream,
+            title: SETTINGS.title || defaultTitle(),
             body: createBody(),
-            draft: IS_DRAFT
+            draft: SETTINGS.isDraft
         });
         return "Pull request created successfully";
 
