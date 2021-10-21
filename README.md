@@ -64,6 +64,8 @@ This parameter must be passed to the environment and must be stored as a [reposi
 
 To provide more flexibility for forks, all settings are stored as json in the environment. You can do this by creating a [repository secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets) and storing the JSON string inside it. Load the secret into the environment variable `AUTO_PR_SETTINGS`.
 
+Don't escape the JSON string it must be stored like `{"title": "A title"}` not `"{\"title\":\"A title\"}"`
+
 The configurable settings are as follows
 
 #### branchFork
