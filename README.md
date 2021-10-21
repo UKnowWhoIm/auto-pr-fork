@@ -22,7 +22,7 @@ A github action to automatically create PR from a fork to the upstream
 
 ```
 steps:
-  - uses: uknowwhoim/auto-pr-fork@v0.1
+  - uses: uknowwhoim/auto-pr-fork@v0.2
     env:
       GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
       AUTO_PR_SETTINGS: ${{ secrets.AUTO_PR_SETTINGS }}
@@ -38,7 +38,7 @@ To allow certain forks to disable this workflow, add a condition to the workflow
 In this example this step would only be executed if the repository has a secret `ALLOW_AUTO_PR` and its truthy.
 ```
 steps:
-  - uses: uknowwhoim/auto-pr-fork@v0.1
+  - uses: uknowwhoim/auto-pr-fork@v0.2
     if: ${{ env.ALLOW }}
     env:
       GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
